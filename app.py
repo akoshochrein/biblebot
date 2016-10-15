@@ -52,6 +52,23 @@ def handle_post(request):
                     message = messaging_event.get('message')
                     text = message.get('text', '')
                     attachments = message.get('attachments', [])
+
+                    response = requests.get('http://getbible.net/json?text=' + text)
+
+                    if response.contet == 'NULL':
+                        text = 'Sorry, the Bible is not too specific on this topic.'
+                    else:
+                        json_response = json.loads(response.content[1:-2])
+
+                        book_nr = random.choice(json_response['book'])
+                        chapter = ''
+                        verse_keys = map(str(sorted(map(int, json_response['book'][book_nr]['chapter'].keys())))
+
+                        for verse_key in chapter_keys:
+                            chapter += json_response['book'][book_nr]['chapter'][verse_key] + '\n'
+
+                        text = chapter
+
                     respond(messaging_event['sender']['id'], text)
                 elif messaging_event.get('delivery'):
                     # Handle message delivery
