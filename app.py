@@ -57,7 +57,7 @@ def handle_post(request):
                     response = requests.get('http://getbible.net/json?text=' + text)
 
                     greetings = ['hi', 'hello']
-                    if any(map(lambda g: g in text.lower(), greetings))):
+                    if any(map(lambda g: g in text.lower(), greetings)):
                         text = 'Hi! Looking for a verse on a specific topic? Just message us what you\'re interested in!'
                         respond(messaging_event['sender']['id'], text, buttons=None)
                     else:
