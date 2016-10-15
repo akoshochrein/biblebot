@@ -56,16 +56,22 @@ def handle_post(request):
 
                     response = requests.get('http://getbible.net/json?text=' + text)
 
-                    if response.content == 'NULL':
-                        text = 'Sorry, the Bible is not too specific on this topic.'
+                    greetings = ['hi', 'hello']
+                    if any(map(lambda g: g in text.lower(), greetings))):
+                        text = 'Hi! Looking for a verse on a specific topic? Just message us what you\'re interested in!'
+                        respond(messaging_event['sender']['id'], text, buttons=None)
                     else:
+                        if response.content == 'NULL':
+                            response = requests.get('http://getbible.net/json?text=' + random.choice(['John', 'James']))
+
                         json_response = json.loads(response.content[1:-2])
 
                         chapter = ''
-                        book_nr = random.choice(json_response['book'].keys())
-                        verse_keys = map(str, sorted(map(int, json_response['book'][book_nr]['chapter'].keys())))
+                        chapter_nr = random.choice(json_response['book'].keys())
+                        verse_keys = map(str, sorted(map(int, json_response['book'][chapter_nr]['chapter'].keys())))
                         verse_key = random.choice(verse_keys)
-                        text = json_response['book'][book_nr]['chapter'][verse_key]['verse']
+                        text = json_response['book'][chapter_nr]['chapter'][verse_key]['verse']
+                        text += ' ' + json_response['book_name'] + ' ' + chapter_nr + ':' + verse_nr
 
                     respond(messaging_event['sender']['id'], text)
                 elif messaging_event.get('delivery'):
@@ -91,11 +97,27 @@ def respond(recipient_id, text, buttons=None):
     payload = {
         'recipient': {
             'id': recipient_id,
-        },
-        'message': {
-            'text': text,
         }
     }
+    if buttons:
+        payload.update({
+            'message': {
+                'attachment': {
+                    'type': 'template',
+                    'payload': {
+                        'template_type': 'button',
+                        'text': text,
+                        'buttons': buttons
+                    }
+                }
+            }
+        })
+    else:
+        payload.update({
+            'message': {
+                'text': text,
+            }
+        })
 
     response = requests.post('https://graph.facebook.com/v2.6/me/messages?access_token={access_token}'.format(
         access_token=MESSENGER_PAGE_ACCESS_TOKEN
