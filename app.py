@@ -107,4 +107,4 @@ def respond(recipient_id, text, buttons=None):
         'content-type': 'application/json'
     })
 
-    print response
+    print response.__dict__
