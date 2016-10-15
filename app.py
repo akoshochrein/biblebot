@@ -66,7 +66,7 @@ def handle_post(request):
                         verse_keys = map(str, sorted(map(int, json_response['book'][book_nr]['chapter'].keys())))
 
                         for verse_key in verse_keys:
-                            chapter += json_response['book'][book_nr]['chapter'][verse_key] + '\n'
+                            chapter += json_response['book'][book_nr]['chapter'][verse_key]['verse'] + '\n'
 
                         text = chapter
 
