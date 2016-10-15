@@ -70,6 +70,7 @@ def handle_post(request):
 
                         text = chapter
 
+
                     respond(messaging_event['sender']['id'], text)
                 elif messaging_event.get('delivery'):
                     # Handle message delivery
@@ -100,8 +101,10 @@ def respond(recipient_id, text, buttons=None):
         }
     }
 
-    requests.post('https://graph.facebook.com/v2.6/me/messages?access_token={access_token}'.format(
+    response = requests.post('https://graph.facebook.com/v2.6/me/messages?access_token={access_token}'.format(
         access_token=MESSENGER_PAGE_ACCESS_TOKEN
     ), data=json.dumps(payload), headers={
         'content-type': 'application/json'
     })
+
+    print response
