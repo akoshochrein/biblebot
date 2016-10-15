@@ -62,9 +62,9 @@ def handle_post(request):
 
                         book_nr = random.choice(json_response['book'])
                         chapter = ''
-                        verse_keys = map(str(sorted(map(int, json_response['book'][book_nr]['chapter'].keys())))
+                        verse_keys = map(str(sorted(map(int, json_response['book'][book_nr]['chapter'].keys()))))
 
-                        for verse_key in chapter_keys:
+                        for verse_key in verse_keys:
                             chapter += json_response['book'][book_nr]['chapter'][verse_key] + '\n'
 
                         text = chapter
