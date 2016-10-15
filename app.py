@@ -55,7 +55,7 @@ def handle_post(request):
 
                     response = requests.get('http://getbible.net/json?text=' + text)
 
-                    if response.contet == 'NULL':
+                    if response.content == 'NULL':
                         text = 'Sorry, the Bible is not too specific on this topic.'
                     else:
                         json_response = json.loads(response.content[1:-2])
