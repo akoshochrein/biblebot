@@ -19,6 +19,11 @@ def healthcheck():
     return Response('OK', 200)
 
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
 @app.route('/webhook', methods=['POST', 'GET'])
 def webhook():
     if request.method == 'GET':
