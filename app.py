@@ -43,6 +43,13 @@ def handle_get(request):
     return response
 
 
+BOOK_LIST = [
+    'John', 'James', 'Matthew', 'Mark', 'Luke', 'Acts', 'Romans', 'Corinthians',
+    'Galatians', 'Ephesians', 'Philippians', 'Colossians', 'Titus', 'Hebrews',
+    'Peter', 'Jude', 'Revelation'
+]
+
+
 def handle_post(request):
     data = request.json
 
@@ -62,12 +69,12 @@ def handle_post(request):
                     response = requests.get('http://getbible.net/json?text=' + text)
 
                     greetings = ['hi', 'hello']
-                    if any(map(lambda g: g in text.lower(), greetings)):
+                    if any(map(lambda g: g in text.lower(), greetings)) and not any(b.lower() in text.lower() for b in BOOK_LIST):
                         text = 'Hi! Looking for a verse on a specific topic? Just message us what you\'re interested in!'
                         respond(messaging_event['sender']['id'], text, buttons=None)
                     else:
                         if response.content == 'NULL':
-                            response = requests.get('http://getbible.net/json?text=' + random.choice(['John', 'James']))
+                            response = requests.get('http://getbible.net/json?text=' + random.choice(BOOK_LIST))
 
                         json_response = json.loads(response.content[1:-2])
 
