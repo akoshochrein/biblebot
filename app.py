@@ -82,7 +82,6 @@ def handle_post(request):
                         json_response = json.loads(response.content[1:-2])
 
                         chapter = ''
-                        print json_response['book']
                         chapter_key = random.choice(json_response['book'].keys())
                         verse_keys = map(str, sorted(map(int, json_response['book'][chapter_key]['chapter'].keys())))
                         verse_key = random.choice(verse_keys)
