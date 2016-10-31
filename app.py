@@ -66,6 +66,10 @@ def handle_post(request):
                     text = message.get('text', '')
                     attachments = message.get('attachments', [])
 
+                    for book in BOOK_LIST:
+                        if book.lower() in text.lower():
+                            text = book.lower()
+
                     response = requests.get('http://getbible.net/json?text=' + text)
 
                     greetings = ['hi', 'hello']
@@ -78,6 +82,7 @@ def handle_post(request):
                         json_response = json.loads(response.content[1:-2])
 
                         chapter = ''
+                        print json_response['book']
                         chapter_key = random.choice(json_response['book'].keys())
                         verse_keys = map(str, sorted(map(int, json_response['book'][chapter_key]['chapter'].keys())))
                         verse_key = random.choice(verse_keys)
