@@ -148,4 +148,4 @@ def respond(recipient_id, text, buttons=None):
         'content-type': 'application/json'
     })
 
-    print 'facebook-response' response.__dict__
+    print 'facebook-response', response.__dict__
