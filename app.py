@@ -76,17 +76,20 @@ def handle_post(request):
                     if any(map(lambda g: g in text.lower(), greetings)) and not any(b.lower() in text.lower() for b in BOOK_LIST):
                         text = 'Hi! Looking for a verse on a specific topic? Just message us what you\'re interested in!'
                     else:
-                        if response.content == 'NULL':
-                            response = requests.get('http://getbible.net/json?text=' + random.choice(BOOK_LIST))
+                        try:
+                            if response.content == 'NULL':
+                                response = requests.get('http://getbible.net/json?text=' + random.choice(BOOK_LIST))
 
-                        json_response = json.loads(response.content[1:-2])
+                            json_response = json.loads(response.content[1:-2])
 
-                        chapter = ''
-                        chapter_key = random.choice(json_response['book'].keys())
-                        verse_keys = map(str, sorted(map(int, json_response['book'][chapter_key]['chapter'].keys())))
-                        verse_key = random.choice(verse_keys)
-                        text = json_response['book'][chapter_key]['chapter'][verse_key]['verse']
-                        text += ' ' + json_response['book_name'] + ' ' + chapter_key + ':' + verse_key
+                            chapter = ''
+                            chapter_key = random.choice(json_response['book'].keys())
+                            verse_keys = map(str, sorted(map(int, json_response['book'][chapter_key]['chapter'].keys())))
+                            verse_key = random.choice(verse_keys)
+                            text = json_response['book'][chapter_key]['chapter'][verse_key]['verse']
+                            text += ' ' + json_response['book_name'] + ' ' + chapter_key + ':' + verse_key
+                        except Exception:
+                            text = 'I was trying to fetch your verse, but was unable to. :( Please try again in a few minutes!'
 
                     respond(messaging_event['sender']['id'], text)
                 elif messaging_event.get('delivery'):
