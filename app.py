@@ -78,7 +78,7 @@ def handle_post(request):
                     thanks = ['thank']
                     if any(map(lambda g: g in text.lower(), greetings)) and not any(b.lower() in text.lower() for b in BOOK_LIST):
                         text = 'Hi! Looking for a verse on a specific topic? Just message us what you\'re interested in!'
-                    else if any(map(lambda g: g in text.lower(), thanks)):
+                    elif any(map(lambda g: g in text.lower(), thanks)):
                         text = 'You are welcome! :)'
                     else:
                         try:
