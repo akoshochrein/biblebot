@@ -73,8 +73,11 @@ def handle_post(request):
                     response = requests.get('http://getbible.net/json?text=' + text)
 
                     greetings = ['hi', 'hello']
+                    thanks = ['thank']
                     if any(map(lambda g: g in text.lower(), greetings)) and not any(b.lower() in text.lower() for b in BOOK_LIST):
                         text = 'Hi! Looking for a verse on a specific topic? Just message us what you\'re interested in!'
+                    else if any(map(lambda g: g in text.lower(), thanks)):
+                        text = 'You are welcome! :)'
                     else:
                         try:
                             if response.content == 'NULL':
