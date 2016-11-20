@@ -66,6 +66,8 @@ def handle_post(request):
                     text = message.get('text', '')
                     attachments = message.get('attachments', [])
 
+                    print 'incoming-message ', text
+
                     for book in BOOK_LIST:
                         if book.lower() in text.lower():
                             text = book.lower()
@@ -146,4 +148,4 @@ def respond(recipient_id, text, buttons=None):
         'content-type': 'application/json'
     })
 
-    print response.__dict__
+    print 'facebook-response' response.__dict__
