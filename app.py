@@ -66,7 +66,11 @@ def handle_post(request):
                     text = message.get('text', '')
                     attachments = message.get('attachments', [])
 
-                    print 'incoming-message ', text
+                    try:
+                        print 'incoming-message ', text
+                    except Exception:
+                        print 'incoming-message unicode-error'
+                        text = random.choice(BOOK_LIST)
 
                     for book in BOOK_LIST:
                         if book.lower() in text.lower():
